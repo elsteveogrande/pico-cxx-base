@@ -1,0 +1,10 @@
+-xc++
+-std=c++23
+-target
+thumb-linux-eabi
+-Wall
+-Wextra
+-Og
+-Wno-deprecated-volatile
+-nostdlib
+-nostartfiles
