@@ -14,34 +14,57 @@
 
 struct Reg;
 
+template <typename Z = u32>
 struct Slice {
     Reg& reg;
     u8 hi;  // MSB position, exclusive
     u8 lo;  // LSB position, inclusive
 
-    void operator=(u32 x);
-    void operator&=(u32 x);
-    void operator|=(u32 x);
-    void operator^=(u32 x);
-    operator u32() const;
+    void operator=(Z x);
+    void operator&=(Z x);
+    void operator|=(Z x);
+    void operator^=(Z x);
+    operator Z() const;
 };
 
 struct Reg {
     u32* const addr;
 
-    Slice operator[](u8 bit) { return (*this)[bit + 1, bit]; }
-    Slice operator[](u8 hi, u8 lo);
+    template <typename T>
+    Slice<T> bits(int hiInc, int loInc) {
+        return Slice<T> {*this, hiInc + 1, loInc};
+    }
 
+    template <typename T = bool>
+    Slice<T> bit(int bit) {
+        return Slice<T>(*this, bit + 1, bit);
+    }
+
+    u32& operator*();
     u32 operator*() const;
 };
 
-inline Slice Reg::operator[](u8 hi, u8 lo) { return Slice {*this, hi, lo}; }
+template <typename Z>
+inline void Slice<Z>::operator=(Z z) {
+    u32 val = *reg;
+    u32 mask = ((1 << hi) - 1) - ((1 << lo) - 1);
+    val &= ~mask;
+    val |= (u32(z) << lo);
+    *reg = val;
+}
 
-inline Slice::operator u32() const {
+template <>
+inline void Slice<bool>::operator=(bool z) {
+    *reg |= (u32(z) << lo);
+}
+
+template <>
+inline Slice<>::operator u32() const {
     if (hi <= lo) { throw hi; }
     return ((*reg) >> lo) & ((1 << (hi - lo)) - 1);
 }
 
+inline u32& Reg::operator*() { return *addr; }
 inline u32 Reg::operator*() const { return *addr; }
 
 template <u32 REGBASE, u8 COUNT>
