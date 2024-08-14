@@ -2,14 +2,19 @@
 
 #include "Reg.h"
 
-template <u32 REGBASE>
-struct PLL {
-    void init();
+template <u32 tBase>
+struct PLL : Regs<tBase, 42> {};
+
+struct SysPLL : PLL<0xbeef0000> {
+    constexpr SysPLL() = default;
 };
 
-struct SysPLL : PLL<0xbeef0000> {};
+template <u32 tBase>
+struct Clock : Regs<tBase, 42> {};
 
-template <u32 REGBASE>
-struct Clock {};
+struct Clock0 : Clock<0xf00df00d> {
+    constexpr Clock0() = default;
+};
 
-struct Clock0 {};
+extern SysPLL gSysPLL;
+extern Clock0 gClock0;

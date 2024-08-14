@@ -10,6 +10,8 @@
 constexpr u32 const kIOBank0Base = 0x40014000;
 
 struct IOBank0 : Regs<kIOBank0Base, 100> {
+    constexpr IOBank0() = default;
+
     // Offsets: 0x000, 0x008, …, 0x0e0, 0x0e8
     // -> indexes 0, 2, 4, ... 58 -> GPIOs 0..29
     struct GPIOStatus : Reg {
@@ -86,4 +88,5 @@ struct IOBank0 : Regs<kIOBank0Base, 100> {
     // TODO: DORMANT_WAKE_INTS2 Register
     // TODO: DORMANT_WAKE_INTS3 Register
 };
-extern IOBank0 ioBank0;
+
+extern IOBank0 gIOBank0;

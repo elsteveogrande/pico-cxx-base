@@ -11,6 +11,8 @@ constexpr u32 const kVRegAndChipResetBase = 0x40064000;
 
 /** Section 2.10.6, "List of Registers" */
 struct VRegAndReset : Regs<kVRegAndChipResetBase, 3> {
+    constexpr VRegAndReset() = default;
+
     struct VReg : Reg {
         auto regOK() { return bit(12); }
 
@@ -68,4 +70,5 @@ struct VRegAndReset : Regs<kVRegAndChipResetBase, 3> {
     auto bod() { return BOD {regs() + 1}; }
     auto chipReset() { return ChipReset {regs() + 2}; }
 };
-extern VRegAndReset vregAndReset;
+
+extern VRegAndReset gVRegAndReset;

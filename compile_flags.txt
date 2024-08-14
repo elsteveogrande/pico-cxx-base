@@ -1,10 +1,14 @@
 -xc++
 -std=c++23
 -target
-thumb-linux-eabi
+arm-none-eabi
 -Wall
 -Wextra
--Og
+-Oz
+-fno-exceptions
 -Wno-deprecated-volatile
+-Wno-unused-command-line-argument
 -nostdlib
--nostartfiles
+-isystem
+./pico-cxx-base
+-g1

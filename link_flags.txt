@@ -1,0 +1,8 @@
+-Wno-unused-command-line-argument
+-target
+arm-none-eabi
+-Wl,-T
+-Wl,pico-cxx-base/layout.ld
+-fuse-ld=lld
+-nostdlib
+-g1
